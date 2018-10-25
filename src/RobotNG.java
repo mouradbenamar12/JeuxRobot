@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,16 +10,17 @@ public class RobotNG extends Robot{
     {
         super(nom);
     }
-    public RobotNG(String nom, int x, int y, String direction, ImageIcon img)
+    public RobotNG(String nom, int x, int y, String direction, ImageIcon img,int capacite)
     {
         super(nom, x, y, direction,img);
+        this.capacite=energie=capacite;
     }
     /**
      * avance de plusieurs pas
      *
      * @param  pas   le nombre de pas
      */
-    public void avance(int pas)
+    public synchronized void avance(int pas)
     {
         for (int i = 0 ; i < pas ; ++i) {
             avance();
@@ -39,6 +41,17 @@ public class RobotNG extends Robot{
     {
         droite();
         droite(); }
+    /**
+     * affiche l'état du robot
+     */
+    public void afficher()
+    {
+        System.out.println("nom : " + nom);
+        System.out.println("position : (" + x + "," + y +")");
+        System.out.println("direction : " + direction);
+        System.out.println("Capacite : " + capacite);
+        System.out.println("Energie : " + energie);
+    }
 
     @Override
     public void run() {
@@ -57,25 +70,25 @@ public class RobotNG extends Robot{
             Collections.shuffle(lstIndexes);
             for(Integer index : lstIndexes) {
                 switch(index) {
-                    case 1: droite(); avance();
+                    case 1: droite(); avance(80);
                         try {
-                            Thread.sleep(50);
+                            Thread.sleep(200);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         break;
-                    case 2: gauche(); avance();try {
-                        Thread.sleep(50);
+                    case 2: gauche(); avance(80);try {
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } break;
-                    case 3: demiTour(); avance();try {
-                        Thread.sleep(50);
+                    case 3: demiTour(); avance(80);try {
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } break;
-                    case 4: avance();try {
-                        Thread.sleep(50);
+                    case 4: avance(80);try {
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } break;
